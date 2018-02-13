@@ -1,7 +1,8 @@
-#!/usr/bin/env python
 import os
 import jinja2
 import webapp2
+
+from google.appengine.api import users
 
 
 template_dir = os.path.join(os.path.dirname(__file__), "../templates")
@@ -28,18 +29,17 @@ class BaseHandler(webapp2.RequestHandler):
         if self.request.cookies.get("cookies-accepted") == "YES":
             params["cookies"] = True
 
+        # get current user
+        user = users.get_current_user()
+        # check if user is logged in or not
+        if user:
+            # create url and add it to params
+            params["logout_url"] = users.create_logout_url("/")
+        else:
+            # create url and add it to params
+            params["login_url"] = users.create_login_url("/")
+        # add user to params
+        params["user"] = user
+
         template = jinja_env.get_template(view_filename)
         return self.response.out.write(template.render(params))
-
-
-class MainHandler(BaseHandler):
-    def get(self):
-        return self.render_template("home.html")
-
-
-class CookieHandler(BaseHandler):
-    def post(self):
-        # save info in cookie to the user's computer
-        # next request will contain info from this cookie
-        self.response.set_cookie("cookies-accepted", "YES")
-        return self.write("Cookies accepted.")

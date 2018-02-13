@@ -7,4 +7,23 @@
   <p>Welcome to Ninja Tech Forum</p>
 </div>
 
+<table class="table">
+  <thead>
+    <tr>
+      <th>Topic title</th>
+      <th>Author</th>
+      <th>Date created</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for topic in topics %}
+    <tr>
+      <td><a href="/topic/details/{{ topic.key.id() }}">{{ topic.title }}</a></td>
+      <td>{{ topic.user_id }}</td>
+      <td>{{ topic.create_time.strftime('%d-%m-%Y %H:%M') }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock content %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ topic.title }} Author: {{ topic.user_id  }}</h3>
+  </div>
+  <div class="panel-body">
+    {{ topic.content }}
+  </div>
+</div>
+
+{% endblock content %}
