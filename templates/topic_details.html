@@ -3,12 +3,38 @@
 {% block content %}
 
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">{{ topic.title }} Author: {{ topic.user_id  }}</h3>
-  </div>
-  <div class="panel-body">
-    {{ topic.content }}
-  </div>
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ topic.title }} Author: {{ topic.user_id  }}</h3>
+    </div>
+    <div class="panel-body">
+        {{ topic.content }}
+    </div>
+</div>
+
+<h1>Comments</h1>
+{% for comment in comments %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h5>Author: {{ comment.user_id  }}, Date: {{ comment.create_time.strftime('%d-%m-%Y %H:%M') }}</h5>
+    </div>
+    <div class="panel-body">
+        {{ comment.content }}
+    </div>
+</div>
+{% endfor %}
+
+<div>
+    <form method="post" action="/comment/add">
+        <div class="form-group">
+            <label>Comment</label>
+            <textarea name="content" class="form-control" rows="6" required></textarea>
+        </div>
+
+        <input name="csrf_token" value="{{ csrf_token }}" hidden>
+        <input name="topic_id" value="{{ topic.key.id() }}" hidden>
+
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
 </div>
 
 {% endblock content %}
