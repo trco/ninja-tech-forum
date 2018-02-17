@@ -4,7 +4,9 @@ from models.models import Topic
 
 class MainHandler(BaseHandler):
     def get(self):
-        topics = Topic.query().order(-Topic.create_time)
+        # fetch saves data to topics variable so the next database query
+        # doesn't have to be performed if needed
+        topics = Topic.query().order(-Topic.create_time).fetch()
 
         params = {
             "topics": topics

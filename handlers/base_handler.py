@@ -26,7 +26,7 @@ class BaseHandler(webapp2.RequestHandler):
             params = {}
 
         # check if cookie exists
-        if self.request.cookies.get("cookies-accepted") == "YES":
+        if self.request.cookies.get == "YES":
             params["cookies"] = True
 
         # get current user
