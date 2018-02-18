@@ -1,8 +1,10 @@
 import os
 import jinja2
 import webapp2
+# uuid generates random tokens
+import uuid
 
-from google.appengine.api import users
+from google.appengine.api import users, memcache
 
 
 template_dir = os.path.join(os.path.dirname(__file__), "../templates")
@@ -43,3 +45,12 @@ class BaseHandler(webapp2.RequestHandler):
 
         template = jinja_env.get_template(view_filename)
         return self.response.out.write(template.render(params))
+
+    def render_template_with_csrf(self, view_filename, params=None):
+        if not params:
+            params = {}
+
+        params["csrf_token"] = str(uuid.uuid4())
+        memcache.add(params["csrf_token"], True, 60*10)
+
+        return self.render_template(view_filename, params)

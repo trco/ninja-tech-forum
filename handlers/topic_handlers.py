@@ -1,39 +1,22 @@
 import cgi
-# uuid generates random tokens
-import uuid
 
-# memcache is database that lives in computer's RAM
-from google.appengine.api import users, memcache
+from google.appengine.api import users
 
 from handlers.base_handler import BaseHandler
 from models.models import Topic, Comment
+from decorators.decorators import csrf_check, login_check
 
 
 class AddTopic(BaseHandler):
-    # get is called when /add-topic is run
+    # get is called when /topic/add is run
     def get(self):
-
-        params = {
-            "csrf_token": str(uuid.uuid4())
-        }
-
-        # add csrf_token to memcache database
-        memcache.add(params["csrf_token"], True, 60*10)
-
-        return self.render_template("add_topic.html", params)
+        # template is rendered with csrf_token
+        return self.render_template_with_csrf("add_topic.html")
 
     # post is called when add topic form is submitted
+    @login_check
+    @csrf_check
     def post(self):
-        # csrf token check
-        csrf_token = self.request.get("csrf_token")
-        if not memcache.get(csrf_token):
-            return self.write("CSRF attack in progress!")
-
-        user = users.get_current_user()
-
-        if not user:
-            return self.write("Please login before you're allowed to post a topic.")
-
         email = users.get_current_user().email()
         # cgi disables option to post html or javascript in form fields
         title = cgi.escape(self.request.get("title"))
@@ -55,7 +38,6 @@ class TopicDetails(BaseHandler):
 
         params = {
             "topic": topic,
-            "csrf_token": str(uuid.uuid4())
         }
 
         # get comments if they exist
@@ -68,7 +50,4 @@ class TopicDetails(BaseHandler):
         except:
             pass
 
-        # add csrf_token to memcache database
-        memcache.add(params["csrf_token"], True, 60*10)
-
-        return self.render_template("topic_details.html", params)
+        return self.render_template_with_csrf("topic_details.html", params)

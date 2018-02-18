@@ -13,5 +13,5 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/set-cookie', CookieHandler, name="set-cookie"),
     webapp2.Route('/topic/add', AddTopic, name="add-topic"),
     webapp2.Route('/topic/details/<topic_id>', TopicDetails, name="topic-details"),
-    webapp2.Route('/comment/add', AddComment, name="add-topic"),
+    webapp2.Route('/comment/add', AddComment, name="add-comment"),
 ], debug=True)

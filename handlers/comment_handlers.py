@@ -7,22 +7,15 @@ from google.appengine.api import users, memcache
 
 from handlers.base_handler import BaseHandler
 from models.models import Topic, Comment
+from decorators.decorators import csrf_check, login_check
 
 
 class AddComment(BaseHandler):
     # post is called when add topic form is submitted
+    @login_check
+    @csrf_check
     def post(self):
-        # csrf token check
-        csrf_token = self.request.get("csrf_token")
-        if not memcache.get(csrf_token):
-            return self.write("CSRF attack in progress!")
-
-        # user login check
-        user = users.get_current_user()
-        if not user:
-            return self.write("Please login before you're allowed to post a comment.")
-
-        # get values for new comment
+        # get values for new comment from the form
         # cgi disables option to post html or javascript in form fields
         # get topic_id from posted form
         email = users.get_current_user().email()
