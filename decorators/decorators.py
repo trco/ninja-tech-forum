@@ -1,6 +1,6 @@
 # memcache is database that lives in computer's RAM
 from google.appengine.api import users, memcache
-
+from models.models import Topic
 
 def csrf_check(func):
     # self is a POST method argument and decorator needs and has access

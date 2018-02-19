@@ -16,3 +16,9 @@ indexes:
   - name: topic_id
   - name: create_time
     direction: desc
+
+- kind: Topic
+  properties:
+  - name: deleted
+  - name: create_time
+    direction: desc

@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import users, mail, taskqueue
 
 
 class Topic(ndb.Model):
@@ -7,10 +8,20 @@ class Topic(ndb.Model):
     title = ndb.StringProperty()
     content = ndb.TextProperty()
 
-    # TODO: check arguments for DateTimeProperty !!!
     create_time = ndb.DateTimeProperty(auto_now_add=True)
     update_time = ndb.DateTimeProperty(auto_now=True)
-    delete_time = ndb.BooleanProperty(default=False)
+    deleted = ndb.BooleanProperty(default=False)
+
+    @staticmethod
+    def delete_topic(topic_id):
+        user = users.get_current_user()
+        admin = users.is_current_user_admin()
+        topic = Topic.get_by_id(int(topic_id))
+
+        if user.email() == topic.user_id or admin:
+            topic.deleted = True
+            # save "deleted" topic to database
+            topic.put()
 
 
 class Comment(ndb.Model):
@@ -22,3 +33,19 @@ class Comment(ndb.Model):
     create_time = ndb.DateTimeProperty(auto_now_add=True)
     update_time = ndb.DateTimeProperty(auto_now=True)
     delete_time = ndb.BooleanProperty(default=False)
+
+    @staticmethod
+    def save_comment(topic_id, content):
+        email = users.get_current_user().email()
+
+        # create new comment and save it to database
+        new_comment = Comment(user_id=email, content=content, topic_id=topic_id)
+        new_comment.put()
+
+        topic = Topic.get_by_id(int(topic_id))
+
+        taskqueue.add(url="/task/send-new-comment-mail",
+                      params={
+                          "topic_author_email": topic.user_id,
+                          "comment_author_email": email
+                      })

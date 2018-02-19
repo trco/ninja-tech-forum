@@ -37,11 +37,15 @@ class BaseHandler(webapp2.RequestHandler):
         if user:
             # create url and add it to params
             params["logout_url"] = users.create_logout_url("/")
+            # add user to params
+            params["user"] = user
         else:
             # create url and add it to params
             params["login_url"] = users.create_login_url("/")
-        # add user to params
-        params["user"] = user
+
+        admin = users.is_current_user_admin()
+        if admin:
+            params["admin"] = admin
 
         template = jinja_env.get_template(view_filename)
         return self.response.out.write(template.render(params))

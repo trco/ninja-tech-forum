@@ -32,22 +32,35 @@ class AddTopic(BaseHandler):
         return self.redirect_to("topic-details", topic_id=new_topic.key.id())
 
 
+class DeleteTopic(BaseHandler):
+    # post is called when delete topic form is submitted
+    @login_check
+    @csrf_check
+    def post(self, topic_id):
+        Topic.delete_topic(topic_id)
+
+        return self.redirect_to("main-page")
+
 class TopicDetails(BaseHandler):
     def get(self, topic_id):
         topic = Topic.get_by_id(int(topic_id))
+        # get comments
+        comments = (Comment.query(
+            Comment.topic_id == topic_id,
+            Comment.delete_time == False).order(-Comment.create_time).fetch()
+        )
 
         params = {
             "topic": topic,
+            "comments": comments
         }
 
-        # get comments if they exist
-        try:
-            comments = (Comment.query(
-                Comment.topic_id == topic_id,
-                Comment.delete_time == False).order(-Comment.create_time).fetch()
-            )
-            params["comments"] = comments
-        except:
-            pass
-
         return self.render_template_with_csrf("topic_details.html", params)
+
+    @login_check
+    @csrf_check
+    def post(self, topic_id):
+        content = cgi.escape(self.request.get("content"))
+        Comment.save_comment(topic_id, content)
+
+        return self.redirect_to("topic-details", topic_id=topic_id)
