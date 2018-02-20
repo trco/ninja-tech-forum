@@ -17,6 +17,12 @@ indexes:
   - name: create_time
     direction: desc
 
+- kind: Comment
+  properties:
+  - name: user_id
+  - name: create_time
+    direction: desc
+
 - kind: Topic
   properties:
   - name: deleted

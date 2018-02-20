@@ -49,3 +49,11 @@ class Comment(ndb.Model):
                           "topic_author_email": topic.user_id,
                           "comment_author_email": email
                       })
+
+    # staticmethods should be the methods that don't need access to other
+    # methods and data in class
+    # can be called on class itself or class instance
+    @staticmethod
+    def get_related_topic_title(topic_id):
+        topic_title = Topic.get_by_id(int(topic_id)).title
+        return topic_title

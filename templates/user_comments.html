@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Your Comments</h1>
+{% for comment in user_comments %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h5>Topic: {{ comment.get_related_topic_title(comment.topic_id) }}, Date: {{ comment.create_time.strftime('%d-%m-%Y %H:%M') }}</h5>
+    </div>
+    <div class="panel-body">
+        {{ comment.content }}
+    </div>
+</div>
+{% endfor %}
+
+{% endblock content %}
