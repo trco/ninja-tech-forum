@@ -44,10 +44,25 @@ class Comment(ndb.Model):
 
         topic = Topic.get_by_id(int(topic_id))
 
+        subscriptions = Subscription.query(
+            Subscription.topic_id == topic_id).fetch()
+
+        subscribers_list = []
+
+        for subscription in subscriptions:
+            subscribers_list.append(subscription.user_id)
+
+        for subscriber in subscribers_list:
+            taskqueue.add(url="/task/send-new-comment-mail",
+                          params={
+                              "comment_author_email": email,
+                              "receiver": subscriber,
+                          })
+
         taskqueue.add(url="/task/send-new-comment-mail",
                       params={
-                          "topic_author_email": topic.user_id,
-                          "comment_author_email": email
+                          "comment_author_email": email,
+                          "receiver": topic.user_id,
                       })
 
     # staticmethods should be the methods that don't need access to other
@@ -57,3 +72,13 @@ class Comment(ndb.Model):
     def get_related_topic_title(topic_id):
         topic_title = Topic.get_by_id(int(topic_id)).title
         return topic_title
+
+class Subscription(ndb.Model):
+    user_id = ndb.StringProperty()
+    topic_id = ndb.StringProperty()
+
+    @staticmethod
+    def save_subscription(topic_id, user_id):
+        # create new subscription and save it to database
+        new_subscription = Subscription(topic_id=topic_id, user_id=user_id)
+        new_subscription.put()

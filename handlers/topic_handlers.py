@@ -3,7 +3,7 @@ import cgi
 from google.appengine.api import users
 
 from handlers.base_handler import BaseHandler
-from models.models import Topic, Comment
+from models.models import Topic, Comment, Subscription
 from decorators.decorators import csrf_check, login_check
 
 
@@ -55,12 +55,24 @@ class TopicDetails(BaseHandler):
             "comments": comments
         }
 
+        user = users.get_current_user()
+        if user:
+            subscribed = Subscription.query(
+                Subscription.user_id == user.email(),
+                Subscription.topic_id == topic_id).fetch()
+            if subscribed:
+                params["subscribed"] = True
+
         return self.render_template_with_csrf("topic_details.html", params)
 
     @login_check
     @csrf_check
     def post(self, topic_id):
         content = cgi.escape(self.request.get("content"))
-        Comment.save_comment(topic_id, content)
+        if content:
+            Comment.save_comment(topic_id, content)
+        else:
+            user_id = users.get_current_user().email()
+            Subscription.save_subscription(topic_id, user_id)
 
         return self.redirect_to("topic-details", topic_id=topic_id)

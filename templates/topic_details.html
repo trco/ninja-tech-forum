@@ -13,6 +13,12 @@
         <input name="csrf_token" value="{{ csrf_token }}" hidden>
       </form>
       {% endif %}
+      {% if not subscribed %}
+        <form method="post">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+          <input name="csrf_token" value="{{ csrf_token }}" hidden>
+        </form>
+      {% endif %}
     {% endif %}
   </div>
   <div class="panel-body">
@@ -33,16 +39,14 @@
 {% endfor %}
 
 <div>
-    <form method="post">
-        <div class="form-group">
-            <label>Comment</label>
-            <textarea name="content" class="form-control" rows="6" required></textarea>
-        </div>
-
-        <input name="csrf_token" value="{{ csrf_token }}" hidden>
-
-        <button type="submit" class="btn btn-success">Submit</button>
-    </form>
+  <form method="post">
+    <div class="form-group">
+      <label>Comment</label>
+      <textarea name="content" class="form-control" rows="6" required></textarea>
+    </div>
+    <input name="csrf_token" value="{{ csrf_token }}" hidden>
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
 </div>
 
 {% endblock content %}

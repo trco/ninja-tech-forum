@@ -5,10 +5,10 @@ from handlers.base_handler import BaseHandler
 
 class MailWorker(BaseHandler):
     def post(self):
-        topic_author_email = self.request.get("topic_author_email")
+        to = self.request.get("receiver")
         comment_author_email = self.request.get("comment_author_email")
 
         mail.send_mail("info@ninjaforum.si",
-                        topic_author_email,
+                        to,
                         "New comment on Ninja-Tech-Forum",
-                        "<b>%s</b> added comment to your topic." % comment_author_email)
+                        "<b>%s</b> added comment." % comment_author_email)
