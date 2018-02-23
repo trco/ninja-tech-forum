@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from google.appengine.ext import ndb
 from google.appengine.api import users, mail, taskqueue
 
@@ -10,6 +12,7 @@ class Topic(ndb.Model):
 
     create_time = ndb.DateTimeProperty(auto_now_add=True)
     update_time = ndb.DateTimeProperty(auto_now=True)
+    deleted_time = ndb.DateTimeProperty()
     deleted = ndb.BooleanProperty(default=False)
 
     @staticmethod
@@ -19,6 +22,7 @@ class Topic(ndb.Model):
         topic = Topic.get_by_id(int(topic_id))
 
         if user.email() == topic.user_id or admin:
+            topic.deleted_time = datetime.now()
             topic.deleted = True
             # save "deleted" topic to database
             topic.put()
@@ -72,6 +76,7 @@ class Comment(ndb.Model):
     def get_related_topic_title(topic_id):
         topic_title = Topic.get_by_id(int(topic_id)).title
         return topic_title
+
 
 class Subscription(ndb.Model):
     user_id = ndb.StringProperty()

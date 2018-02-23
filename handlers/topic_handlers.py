@@ -41,6 +41,7 @@ class DeleteTopic(BaseHandler):
 
         return self.redirect_to("main-page")
 
+
 class TopicDetails(BaseHandler):
     def get(self, topic_id):
         topic = Topic.get_by_id(int(topic_id))

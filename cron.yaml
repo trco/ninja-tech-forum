@@ -1,0 +1,5 @@
+cron:
+- descripton: Final deletion of deleted topics.
+  url: /cron/topics-delete
+  schedule: every sunday 03:00
+  timezone: Europe/Ljubljana
