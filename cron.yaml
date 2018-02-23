@@ -1,5 +1,10 @@
 cron:
-- descripton: Final deletion of deleted topics.
+- descripton: "Final deletion of deleted topics."
   url: /cron/topics-delete
   schedule: every sunday 03:00
+  timezone: Europe/Ljubljana
+
+- description: "Send latest topics email"
+  url: /cron/notify-on-latest-topics
+  schedule: every 24 hours
   timezone: Europe/Ljubljana

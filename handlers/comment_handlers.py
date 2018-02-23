@@ -15,4 +15,4 @@ class UserComments(BaseHandler):
             "user_comments": user_comments
         }
 
-        return self.render_template("user_comments.html", params)
+        return self.render_template_with_csrf("user_comments.html", params)

@@ -6,8 +6,9 @@ from handlers.main_handler import MainHandler
 from handlers.cookie_handler import CookieHandler
 from handlers.topic_handlers import AddTopic, DeleteTopic, TopicDetails
 from handlers.comment_handlers import UserComments
-from workers.mail_worker import MailWorker
-from cron.cron import TopicsDeleteCron
+from handlers.subscription_handler import SubscribeLatestTopics
+from workers.mail_worker import MailWorker, MailWorkerTopics
+from cron.cron import TopicsDeleteCron, NotifyOnLatestTopicsCron
 
 
 # url routes
@@ -19,5 +20,8 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/topic/details/<topic_id>', TopicDetails, name="topic-details"),
     webapp2.Route('/user-comments', UserComments, name="user-comments"),
     webapp2.Route('/task/send-new-comment-mail', MailWorker, name="mail-worker"),
+    webapp2.Route('/task/send-latest-topics-mail', MailWorkerTopics, name="mail-worker-topics"),
     webapp2.Route('/cron/topics-delete', TopicsDeleteCron, name="topics-delete"),
+    webapp2.Route('/cron/notify-on-latest-topics', NotifyOnLatestTopicsCron, name="notify-on-latest-topics"),
+    webapp2.Route('/subscribe/latest-topics', SubscribeLatestTopics, name="latest-topics"),
 ], debug=True)

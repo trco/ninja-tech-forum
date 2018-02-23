@@ -87,3 +87,12 @@ class Subscription(ndb.Model):
         # create new subscription and save it to database
         new_subscription = Subscription(topic_id=topic_id, user_id=user_id)
         new_subscription.put()
+
+class SubscriptionLatestTopics(ndb.Model):
+    user_id = ndb.StringProperty()
+
+    @staticmethod
+    def save_subscription(user_id):
+        # create new subscription and save it to database
+        new_subscription = SubscriptionLatestTopics(user_id=user_id)
+        new_subscription.put()

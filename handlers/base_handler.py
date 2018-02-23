@@ -6,6 +6,8 @@ import uuid
 
 from google.appengine.api import users, memcache
 
+from models.models import SubscriptionLatestTopics
+
 
 template_dir = os.path.join(os.path.dirname(__file__), "../templates")
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=False)
@@ -39,6 +41,14 @@ class BaseHandler(webapp2.RequestHandler):
             params["logout_url"] = users.create_logout_url("/")
             # add user to params
             params["user"] = user
+
+            # check if user is subscribed to Latest topics
+            subscribed_latest_topics = SubscriptionLatestTopics.query(
+                SubscriptionLatestTopics.user_id == user.email()
+            ).fetch()
+            if subscribed_latest_topics:
+                params["subscribed_latest_topics"] = True
+                print params["subscribed_latest_topics"]
         else:
             # create url and add it to params
             params["login_url"] = users.create_login_url("/")

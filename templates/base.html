@@ -35,6 +35,16 @@
               {% if not user %}
                 <li><a href="{{ login_url }}">Login</a></li>
               {% else %}
+                {% if not subscribed_latest_topics %}
+                <li>
+                  <form method="post" action="/subscribe/latest-topics">
+                    <button type="submit" class="btn btn-primary">Subscribe to latest topics</button>
+                    <input name="csrf_token" value="{{ csrf_token }}" hidden>
+                  </form>
+                </li>
+                {% else %}
+                <li><a href="#" style="color:blue">You're subscribed to latest topics.</a></li>
+                {% endif %}
                 <li><a href="/topic/add">Add Topic</a></li>
                 <li><a href="/user-comments">Your comments</a></li>
                 <li><a href="#">{{ user.email() }}</a></li>
