@@ -17,6 +17,19 @@ class TopicsDeleteCron(BaseHandler):
         for topic in topics_to_delete:
             topic.key.delete()
 
+
+class CommentsDeleteCron(BaseHandler):
+    def get(self):
+        time_delete = datetime.now() - timedelta(days=30)
+
+        comments_to_delete = Comment.query(
+            Comment.deleted == True,
+            Comment.deleted_time != None,
+            Comment.deleted_time < time_delete).fetch()
+        for comment in comments_to_delete:
+            comment.key.delete()
+
+
 class NotifyOnLatestTopicsCron(BaseHandler):
     def get(self):
         time_limit = datetime.now() - timedelta(days=1)

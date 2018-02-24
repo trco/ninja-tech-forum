@@ -7,6 +7,10 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h5>Topic: {{ comment.get_related_topic_title(comment.topic_id) }}, Date: {{ comment.create_time.strftime('%d-%m-%Y %H:%M') }}</h5>
+        <form method="post" action="/comment/delete/{{ comment.key.id() }}">
+          <button type="submit" class="btn btn-danger">Delete</button>
+          <input name="csrf_token" value="{{ csrf_token }}" hidden>
+        </form>
     </div>
     <div class="panel-body">
         {{ comment.content }}

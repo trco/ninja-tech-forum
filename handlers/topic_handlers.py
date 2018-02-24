@@ -48,7 +48,7 @@ class TopicDetails(BaseHandler):
         # get comments
         comments = (Comment.query(
             Comment.topic_id == topic_id,
-            Comment.delete_time == False).order(-Comment.create_time).fetch()
+            Comment.deleted == False).order(-Comment.create_time).fetch()
         )
 
         params = {

@@ -36,7 +36,8 @@ class Comment(ndb.Model):
 
     create_time = ndb.DateTimeProperty(auto_now_add=True)
     update_time = ndb.DateTimeProperty(auto_now=True)
-    delete_time = ndb.BooleanProperty(default=False)
+    deleted_time = ndb.DateTimeProperty()
+    deleted = ndb.BooleanProperty(default=False)
 
     @staticmethod
     def save_comment(topic_id, content):
@@ -68,6 +69,18 @@ class Comment(ndb.Model):
                           "comment_author_email": email,
                           "receiver": topic.user_id,
                       })
+
+    @staticmethod
+    def delete_comment(comment_id):
+        user = users.get_current_user()
+        admin = users.is_current_user_admin()
+        comment = Comment.get_by_id(int(comment_id))
+
+        if user.email() == comment.user_id or admin:
+            comment.deleted_time = datetime.now()
+            comment.deleted = True
+            # save "deleted" comment to database
+            comment.put()
 
     # staticmethods should be the methods that don't need access to other
     # methods and data in class

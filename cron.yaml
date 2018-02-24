@@ -4,6 +4,11 @@ cron:
   schedule: every sunday 03:00
   timezone: Europe/Ljubljana
 
+- descripton: "Final deletion of deleted comments."
+  url: /cron/comments-delete
+  schedule: every sunday 06:00
+  timezone: Europe/Ljubljana
+
 - description: "Send latest topics email"
   url: /cron/notify-on-latest-topics
   schedule: every 24 hours

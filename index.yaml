@@ -19,6 +19,20 @@ indexes:
 
 - kind: Comment
   properties:
+  - name: deleted
+  - name: user_id
+  - name: create_time
+    direction: desc
+
+- kind: Comment
+  properties:
+  - name: deleted
+  - name: topic_id
+  - name: create_time
+    direction: desc
+
+- kind: Comment
+  properties:
   - name: user_id
   - name: create_time
     direction: desc
