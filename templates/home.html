@@ -2,28 +2,21 @@
 
 {% block content %}
 
-<div class="jumbotron">
-  <h1>Ninja Tech Forum</h1>
-  <p>Welcome to Ninja Tech Forum</p>
-</div>
+<h1 class="my-4">Ninja Tech Forum</h1>
+<hr>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Topic title</th>
-      <th>Author</th>
-      <th>Date created</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for topic in topics %}
-    <tr>
-      <td><a href="/topic/details/{{ topic.key.id() }}">{{ topic.title }}</a></td>
-      <td>{{ topic.user_id }}</td>
-      <td>{{ topic.create_time.strftime('%d-%m-%Y %H:%M') }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% for topic in topics %}
+<div class="card mb-4">
+  <div class="card-body">
+    <h2 class="card-title">{{ topic.title }}</h2>
+    <p class="card-text text-truncate">{{ topic.content }}</p>
+    <a href="/topic/details/{{ topic.key.id() }}" class="btn btn-primary">Read More &rarr;</a>
+  </div>
+  <div class="card-footer text-muted">
+    Posted on {{ topic.create_time.strftime('%B %d, %Y at %H:%M') }} by
+    <a href="#">{{ topic.user_id }}</a>
+  </div>
+</div>
+{% endfor %}
 
 {% endblock content %}

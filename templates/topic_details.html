@@ -2,98 +2,134 @@
 
 {% block content %}
 
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3>{{ topic.title }} Author: {{ topic.user_id  }}</h3>
-    {% if user %}
-      {% if user.email() == topic.user_id or admin %}
-      <!-- Button trigger modal -->
-      <button id="{{ topic.key.id() }}" type="button" class="btn btn-danger delete-topic-btn" data-toggle="modal" data-target="#topicModal">
-        Delete
-      </button>
-      {% endif %}
-      {% if not subscribed %}
-        <form method="post">
-          <button type="submit" class="btn btn-primary">Subscribe</button>
-          <input name="csrf_token" value="{{ csrf_token }}" hidden>
-        </form>
-      {% endif %}
+<!-- Title -->
+<h1 class="mt-4">{{ topic.title }}</h1>
+
+<!-- Author -->
+<div class="input-group">
+  <p class="lead"> by <a href="#">{{ topic.user_id }}</a>
+
+  {% if user %}
+
+    {% if user.email() == topic.user_id or admin %}
+    <!-- Button trigger modal -->
+    <button id="{{ topic.key.id() }}" type="button" class="btn btn-danger delete-topic-btn ml-2 btn-sm" data-toggle="modal" data-target="#topicModal">
+      Delete
+    </button>
     {% endif %}
-  </div>
-  <div class="panel-body">
-    {{ topic.content }}
-  </div>
+
+    {% if not subscribed and user.email() != topic.user_id %}
+    <form method="post">
+      <button type="submit" class="btn btn-primary ml-2 btn-sm">Subscribe</button>
+      <input name="csrf_token" value="{{ csrf_token }}" hidden>
+    </form>
+    {% endif %}
+
+  {% endif %}
+
+  </p>
 </div>
 
-<div class="modal fade" id="topicModal" tabindex="-1" role="dialog">
+<!-- Modal - delete comment -->
+<div class="modal" id="topicModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Delete topic</h4>
+        <h5 class="modal-title">Delete topic</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
         <p>Do you really want to delete your topic?</p>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <form method="post" action="" id="modalForm">
           <button type="submit" class="btn btn-danger">Delete</button>
           <input name="csrf_token" value="{{ csrf_token }}" hidden>
         </form>
       </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<h1>Comments</h1>
-{% for comment in comments %}
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h5>Author: {{ comment.user_id  }}, Date: {{ comment.create_time.strftime('%d-%m-%Y %H:%M') }}</h5>
-        {% if user %}
-          {% if user.email() == comment.user_id or admin %}
-          <!-- Button trigger modal -->
-          <button id="{{ comment.key.id() }}" type="button" class="btn btn-danger delete-comment-btn" data-toggle="modal" data-target="#commentModal">
-            Delete
-          </button>
-          {% endif %}
-        {% endif %}
     </div>
-    <div class="panel-body">
-        {{ comment.content }}
-    </div>
+  </div>
 </div>
+
+<hr>
+<!-- Date/Time -->
+<p>Posted on {{ topic.create_time.strftime('%B %d, %Y at %H:%M') }}</p>
+<hr>
+
+<!-- Post Content -->
+<p>{{ topic.content }}</p>
+
+<blockquote class="blockquote">
+ <footer class="blockquote-footer">{{ topic.title }} by
+   <cite title="Source Title">{{ topic.user_id }}</cite>
+ </footer>
+</blockquote>
+
+<hr>
+
+<!-- Comments Form -->
+<div class="card my-4">
+  <h5 class="card-header">Leave a Comment:</h5>
+  <div class="card-body">
+    <form method="post">
+      <div class="form-group">
+        <textarea name="content" class="form-control" rows="3" required></textarea>
+      </div>
+      <input name="csrf_token" value="{{ csrf_token }}" hidden>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Comments -->
+{% for comment in comments %}
+
+<div class="media mb-4">
+ <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+ <div class="media-body">
+   <h5 class="mt-0">{{ comment.user_id  }}
+     {% if user %}
+       {% if user.email() == comment.user_id or admin %}
+       <!-- Button trigger modal -->
+       <button id="{{ comment.key.id() }}" type="button" class="btn btn-danger delete-comment-btn btn-sm" data-toggle="modal" data-target="#commentModal">
+         Delete
+       </button>
+       {% endif %}
+     {% endif %}
+   </h5>
+   <h6>Posted on: {{ comment.create_time.strftime('%B %d, %Y at %H:%M') }}</h6>
+   {{ comment.content }}
+ </div>
+</div>
+
 {% endfor %}
 
-<div class="modal fade" id="commentModal" tabindex="-1" role="dialog">
+<!-- Modal - delete comment -->
+<div class="modal" id="commentModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Delete comment</h4>
+        <h5 class="modal-title">Delete comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
         <p>Do you really want to delete your comment?</p>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <form method="post" action="" id="modalForm">
           <button type="submit" class="btn btn-danger">Delete</button>
           <input name="csrf_token" value="{{ csrf_token }}" hidden>
         </form>
       </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div>
-  <form method="post">
-    <div class="form-group">
-      <label>Comment</label>
-      <textarea name="content" class="form-control" rows="6" required></textarea>
     </div>
-    <input name="csrf_token" value="{{ csrf_token }}" hidden>
-    <button type="submit" class="btn btn-success">Submit</button>
-  </form>
+  </div>
 </div>
 
 {% endblock content %}

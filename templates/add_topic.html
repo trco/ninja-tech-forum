@@ -2,26 +2,28 @@
 
 {% block content %}
 
-<h1>Add Topic</h1>
+<!-- Title -->
+<h1 class="mt-4">Add Topic</h1>
+<hr>
 
 <div class="row">
-    <div class="col-md-6">
-        <form method="post">
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" class="form-control" name="title" required>
-            </div>
+  <div class="col-12">
+    <form method="post">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="form-control" name="title" required>
+      </div>
 
-            <div class="form-group">
-                <label>Content</label>
-                <textarea name="content" class="form-control" rows="6" required></textarea>
-            </div>
+      <div class="form-group">
+        <label>Content</label>
+        <textarea name="content" class="form-control" rows="6" required></textarea>
+      </div>
 
-            <input name="csrf_token" value="{{ csrf_token }}" hidden>
+      <input name="csrf_token" value="{{ csrf_token }}" hidden>
 
-            <button type="submit" class="btn btn-success">Submit</button>
-        </form>
-    </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
 </div>
 
 {% endblock content %}

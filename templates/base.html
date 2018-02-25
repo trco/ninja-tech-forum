@@ -9,73 +9,114 @@
     <title>Ninja Tech Forum</title>
 
     <!-- Bootstrap -->
-    <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet"> -->
+    <!-- Custom styles for this template -->
+    <link href="/assets/custom/css/blog-home.css" rel="stylesheet">
+    <link href="/assets/custom/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-      <nav class="navbar navbar-default">
-        <div class="container-fluid">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Ninja Tech Forum</a>
-          </div>
 
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="#">About</a></li>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">Ninja Tech Forum</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        {% if not user %}
+        {% if not cookies %}
+        <li class="nav-item">
+          <form method="post" action="/set-cookie">
+          <button class="btn btn-success" type="submit" name="button">Accept Cookies</button>
+          </form>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ login_url }}">Login
+          </a>
+        </li>
+        {% else %}
+        <li class="nav-item align-self-md-center" style="color:#007bff">
+          You are logged in as {{ user.email() }}.
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ logout_url }}">Logout
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
 
-              {% if not user %}
-                <li><a href="{{ login_url }}">Login</a></li>
-              {% else %}
-                {% if not subscribed_latest_topics %}
-                <li>
-                  <form method="post" action="/subscribe/latest-topics">
-                    <button type="submit" class="btn btn-primary">Subscribe to latest topics</button>
-                    <input name="csrf_token" value="{{ csrf_token }}" hidden>
-                  </form>
-                </li>
-                {% else %}
-                <li><a href="#" style="color:blue">You're subscribed to latest topics.</a></li>
-                {% endif %}
-                <li><a href="/topic/add">Add Topic</a></li>
-                <li><a href="/user-comments">Your comments</a></li>
-                <li><a href="#">{{ user.email() }}</a></li>
-                <li><a href="{{ logout_url }}">Logout</a></li>
-              {% endif %}
+<!-- Page Content -->
+<div class="container">
 
-            </ul>
-          </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-      </nav>
+  <div class="row">
 
-      {% if not cookies %}
-      <div class="alert alert-danger">
-        Please accept the Cookies.
-        <form method="post" action="/set-cookie">
-          <button class="btn btn-success" type="submit" name="button">Accept</button>
-        </form>
-      </div>
-      {% endif %}
+    <!-- Blog Entries Column -->
+    <div class="col-md-8">
 
       {% block content %}
       {% endblock content %}
 
-    </div><!-- container -->
+    </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/assets/bootstrap/js/bootstrap.js"></script>
+    <!-- Sidebar Column -->
+    <div class="col-md-4">
 
-    {% block extrascripts %}
-    {% endblock extrascripts %}
+      {% if not user %}
+      <!-- About us -->
+      <div class="card my-4">
+        <h5 class="card-header">About Ninja Tech Forum</h5>
+        <div class="card-body">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        </div>
+      </div>
+      {% else %}
+      <div class="card my-4">
+        <h5 class="card-header">Dashboard</h5>
+        <div class="card-body">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link pl-0" href="/topic/add">Add Topic</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link pl-0" href="/user-comments">My comments</a>
+            </li>
+          </ul>
+          <hr>
+          {% if not subscribed_latest_topics %}
+          <form method="post" action="/subscribe/latest-topics">
+            <button type="submit" class="btn btn-success">Subscribe to latest topics</button>
+            <input name="csrf_token" value="{{ csrf_token }}" hidden>
+          </form>
+          {% else %}
+          <p>You're subscribed to latest topics.</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+  <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed
+<script src="/assets/bootstrap/js/bootstrap.js"></script> -->
+<script src="/assets/custom/js/bootstrap.bundle.min.js"></script>
+
+{% block extrascripts %}
+{% endblock extrascripts %}
+
 </body>
 </html>
