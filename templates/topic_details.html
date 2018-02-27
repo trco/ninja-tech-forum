@@ -30,7 +30,7 @@
   </p>
 </div>
 
-<!-- Modal - delete comment -->
+<!-- Modal - delete topic -->
 <div class="modal" id="topicModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -45,7 +45,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <form method="post" action="" id="modalForm">
+        <form method="post" action="" id="deleteTopicForm">
           <button type="submit" class="btn btn-danger">Delete</button>
           <input name="csrf_token" value="{{ csrf_token }}" hidden>
         </form>
@@ -123,7 +123,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <form method="post" action="" id="modalForm">
+        <form method="post" action="" id="deleteCommentForm">
           <button type="submit" class="btn btn-danger">Delete</button>
           <input name="csrf_token" value="{{ csrf_token }}" hidden>
         </form>
@@ -140,12 +140,13 @@
 $(function() {
     $(".delete-comment-btn").click(function() {
         var comment_id = $(this).attr("id");
-        $("#modalForm").attr("action", "/comment/delete/" + comment_id);
+        console.log(comment_id);
+        $("#deleteCommentForm").attr("action", "/comment/delete/" + comment_id);
     });
 
     $(".delete-topic-btn").click(function() {
         var comment_id = $(this).attr("id");
-        $("#modalForm").attr("action", "/topic/delete/" + comment_id);
+        $("#deleteTopicForm").attr("action", "/topic/delete/" + comment_id);
     });
 });
 </script>

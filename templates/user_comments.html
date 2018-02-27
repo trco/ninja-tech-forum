@@ -44,7 +44,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <form method="post" action="" id="modalForm">
+        <form method="post" action="" id="deleteCommentForm">
           <button type="submit" class="btn btn-danger">Delete</button>
           <input name="csrf_token" value="{{ csrf_token }}" hidden>
         </form>
@@ -61,7 +61,7 @@
 $(function() {
     $(".delete-comment-btn").click(function() {
         var comment_id = $(this).attr("id");
-        $("#modalForm").attr("action", "/comment/delete/" + comment_id);
+        $("#deleteCommentForm").attr("action", "/comment/delete/" + comment_id);
     });
 });
 </script>

@@ -23,6 +23,8 @@ Run tests via command line (terminal).
 
     nosetests -v --with-gae
 
+    nosetests --with-gae -v --gae-lib-root="/home/user/google-cloud-sdk/platform/google_appengine"
+
 If it doesn't recognize GAE path, you have to set it up. See `--gae-lib-root` under `nosetests --help`.
 
 **Run only tests in one file:**
