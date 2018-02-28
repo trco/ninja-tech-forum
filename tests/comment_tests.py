@@ -68,7 +68,10 @@ class CommentTests(unittest.TestCase):
         comment = Comment.query().get()
         params = {"csrf_token": csrf_token}
 
-        post = self.testapp.post('/comment/delete/' + str(comment.key.id()), params)
+        post = self.testapp.post('/comment/delete/' + str(comment.key.id()), params, {'referer': '/user-comments'})
         self.assertEqual(post.status_int, 302)
         # check if comment.deleted field was set to True
         self.assertEqual(comment.deleted, True)
+
+        post = self.testapp.post('/comment/delete/' + str(comment.key.id()), params, {'referer': '/topic/details/' + str(topic.key.id())})
+        self.assertEqual(post.status_int, 302)

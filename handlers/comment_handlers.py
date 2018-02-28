@@ -26,5 +26,5 @@ class DeleteComment(BaseHandler):
     def post(self, comment_id):
         Comment.delete_comment(comment_id)
 
-        # return self.redirect(self.request.referer)
-        return self.redirect_to("main-page")
+        return self.redirect(self.request.referer)
+        # return self.redirect_to("main-page")
