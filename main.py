@@ -5,7 +5,7 @@ import webapp2
 from handlers.main_handler import MainHandler
 from handlers.cookie_handler import CookieHandler
 from handlers.topic_handlers import AddTopic, DeleteTopic, TopicDetails
-from handlers.comment_handlers import UserComments, DeleteComment
+from handlers.comment_handlers import UserComments, DeleteComment, CountComments
 from handlers.subscription_handler import SubscribeLatestTopics
 from workers.mail_worker import MailWorker, MailWorkerTopics
 from cron.cron import TopicsDeleteCron, NotifyOnLatestTopicsCron, CommentsDeleteCron
@@ -25,6 +25,7 @@ app = webapp2.WSGIApplication([
     # comment routes
     webapp2.Route('/comment/delete/<comment_id>', DeleteComment, name="delete-comment"),
     webapp2.Route('/user-comments', UserComments, name="user-comments"),
+    webapp2.Route('/count-comments/<topic_id>', CountComments, name="count-comments"),
     # crons
     webapp2.Route('/cron/topics-delete', TopicsDeleteCron, name="topics-delete"),
     webapp2.Route('/cron/comments-delete',CommentsDeleteCron, name="comments-delete"),

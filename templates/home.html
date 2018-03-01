@@ -2,13 +2,14 @@
 
 {% block content %}
 
-<h1 class="my-4">Ninja Tech Forum</h1>
+<h1 class="title my-4">Ninja Tech Forum</h1>
 <hr>
 
 {% for topic in topics %}
 <div class="card mb-4">
   <div class="card-body">
-    <h2 class="card-title">{{ topic.title }}</h2>
+    <h2 id="{{ topic.key.id() }}" class="card-title">{{ topic.title }}</h2>
+    <div id="count-comments-{{ topic.key.id() }}" class=""></div>
     <p class="card-text text-truncate">{{ topic.content }}</p>
     <a href="/topic/details/{{ topic.key.id() }}" class="btn btn-primary">Read More &rarr;</a>
   </div>
@@ -17,6 +18,26 @@
     <a href="#">{{ topic.user_id }}</a>
   </div>
 </div>
+
 {% endfor %}
 
 {% endblock content %}
+
+{% block extrascripts %}
+
+<script type="text/javascript">
+    $(function() {
+
+      $("h2").mouseover(function() {
+          var topic_id = $(this).attr("id");
+          // first argument is url that needs to be called
+          // second argument is the function that is called when we get response from first url
+          $.get("/count-comments/" + topic_id, function(count_comments) {
+              $("#count-comments-" + topic_id).text("Number of comments: " + count_comments);
+          });
+      });
+
+    });
+</script>
+
+{% endblock extrascripts %}

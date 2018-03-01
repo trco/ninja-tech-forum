@@ -19,11 +19,47 @@
         <textarea name="content" class="form-control" rows="6" required></textarea>
       </div>
 
+      <div class="form-group">
+        <label>What is the sum of <span class="numOne"></span> and <span class="numTwo"></span> ?</label>
+        <input id="calc" name="calc" class="form-control" required>
+      </div>
+
       <input name="csrf_token" value="{{ csrf_token }}" hidden>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button id="submit-button" type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
 </div>
 
 {% endblock content %}
+
+{% block extrascripts %}
+
+<script type="text/javascript">
+    $(function() {
+
+        $("#submit-button").click(function() {
+
+        });
+
+        var numOne = Math.floor(Math.random() * 10) + 1;
+        var numTwo = Math.floor(Math.random() * 10) + 1;
+        var sum = numOne + numTwo;
+
+        $(".numOne").text(numOne);
+        $(".numTwo").text(numTwo);
+
+        $("#submit-button").click(function (event) {
+            var value = parseInt($("#calc").val());
+            if (value != sum) {
+                event.preventDefault();
+            }
+            else {
+                $(this).hide();
+            }
+        });
+
+    });
+</script>
+
+{% endblock extrascripts %}

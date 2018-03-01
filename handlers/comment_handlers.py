@@ -28,3 +28,11 @@ class DeleteComment(BaseHandler):
 
         return self.redirect(self.request.referer)
         # return self.redirect_to("main-page")
+
+class CountComments(BaseHandler):
+    def get(self, topic_id):
+        count_comments = Comment.query(
+            Comment.topic_id == topic_id,
+            Comment.deleted == False).count()
+
+        return self.write(count_comments)
