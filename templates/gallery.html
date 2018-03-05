@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+<link href="/assets/lightbox/css/lightbox.css" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+
+<h1 class="title my-4">Gallery</h1>
+<hr>
+
+<div class="container">
+  <div class="row">
+    <div class="col-4">
+      <a href="https://storage.googleapis.com/smartninja-org-assets/curriculums/wd2/ninja-kid.png" data-lightbox="ninja">
+        <img class="img-fluid" src="https://storage.googleapis.com/smartninja-org-assets/curriculums/wd2/ninja-kid.png">
+      </a>
+    </div>
+
+    <div class="col-4">
+      <a href="https://storage.googleapis.com/smartninja-org-assets/curriculums/wd2/ninja-zone.png" data-lightbox="ninja">
+        <img class="img-fluid" src="https://storage.googleapis.com/smartninja-org-assets/curriculums/wd2/ninja-zone.png">
+      </a>
+    </div>
+
+    <div class="col-4">
+      <a href="https://storage.googleapis.com/smartninja-org-assets/curriculums/wd2/ninja-penguin.png" data-lightbox="ninja">
+        <img class="img-fluid" src="https://storage.googleapis.com/smartninja-org-assets/curriculums/wd2/ninja-penguin.png">
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block extrascripts %}
+{{ super() }}
+<script src="/assets/lightbox/js/lightbox.js"></script>
+{% endblock extrascripts %}

@@ -8,14 +8,13 @@
 
     <title>Ninja Tech Forum</title>
 
+    {% block css %}
     <!-- Bootstrap -->
     <!-- <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet"> -->
     <!-- Custom styles for this template -->
     <link href="/assets/custom/css/blog-home.css" rel="stylesheet">
     <link href="/assets/custom/css/bootstrap.min.css" rel="stylesheet">
-
-    {% block javascript %}
-    {% endblock javascript %}
+    {% endblock css %}
 
 </head>
 
@@ -90,6 +89,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link pl-0" href="/user-comments">My comments</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link pl-0" href="/gallery">Gallery</a>
             </li>
           </ul>
           <hr>
